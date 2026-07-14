@@ -1,0 +1,12 @@
+# secrets & local config — NEVER commit
+config.json
+*.key
+.openrouter*
+.env
+
+# run outputs (regenerated locally; keep the repo clean)
+task/
+runs/
+__pycache__/
+*.pyc
+.DS_Store

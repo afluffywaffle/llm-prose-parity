@@ -1,0 +1,24 @@
+{
+  "_comment": "Copy this to config.json (gitignored) and edit. Slugs are OpenRouter model ids and DO change over time — verify current ones with the curl in the README before a run. To test truly-local models, set base_url to an OpenAI-compatible endpoint (e.g. Ollama http://localhost:11434/v1) and list its model names as contestants.",
+  "base_url": "https://openrouter.ai/api/v1/chat/completions",
+
+  "author_model": "google/gemini-2.5-flash",
+  "author_temperature": 0.9,
+  "author_max_tokens": 6000,
+
+  "reader_model": "google/gemini-2.5-flash-lite",
+
+  "contestants": [
+    "google/gemma-3-27b-it",
+    "qwen/qwen3-32b",
+    "mistralai/mistral-small-24b-instruct-2501",
+    "meta-llama/llama-3.3-70b-instruct",
+    "openai/gpt-oss-120b",
+    "openai/gpt-4o",
+    "anthropic/claude-haiku-4.5"
+  ],
+
+  "temperature": 0.2,
+  "max_tokens": 8000,
+  "parallel": 8
+}
