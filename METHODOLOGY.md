@@ -57,10 +57,28 @@ Stdlib Python; one run is cents on OpenRouter (or free on a local endpoint). `ge
 reproduces a premise; `run_parity.py --seed N` reproduces the blind-label shuffle. `task/premise.json`
 records what was generated, so you can disclose exactly what a run tested.
 
-## Limitations (be honest about these)
+## Known biases (name them, then reduce them)
+This tool is honest about the ways its own result can be skewed. Two matter most:
+
+**1. Same-family author / judge bias.** The *author model* (writes the task) and *reader model*
+(summarizes) can share style priors with contestants from the same model family, and a pack authored
+in one model's register may subtly suit that model's drafts (a home-field effect). If you then let a
+model from that family narrate the post-reveal analysis, the thumb leans further on the scale.
+*Reduce it:* pick an author and reader from a **different family** than your headline contestants, and
+have any after-the-fact "why did X win" analysis done by a **non-contestant** model (or just you).
+
+**2. Rater acclimation (mere-exposure).** If you already draft with one model a lot, your sense of "the
+right voice" has been partly *shaped by that model* — so its output can feel correct because it's
+**familiar**, not because it's better. Blind labels hide the *name* but not the familiar *style*.
+*Reduce it:* score against an **explicit written rubric** (concrete markers — is the dialect audible? is
+the constraint honored? is the cadence there?) instead of gestalt "feels right"; **rotate** the models
+you draft with so your ear isn't mono-cultured; get an occasional **second rater** with no exposure to
+your usual model; and weight the **taste-independent** signals (constraint violations, left-in
+scaffolding, wrong terms, repetition) alongside subjective voice — those don't care what you're used to.
+
+## Other limitations (be honest about these)
 - The rating is one human's judgement — that's the *point* (it's your prose taste that matters), but it's
   subjective; average multiple raters if you want robustness.
-- The "author model" that writes the task and the "reader model" that summarizes are themselves models;
-  a weak author model makes a weak task. Use a strong one.
+- A weak author model makes a weak task. Use a strong one.
 - Model outputs can contain instruction-like text; the reader step only summarizes, so worst case a
   summary is slightly off — verify anything surprising against the draft itself.
