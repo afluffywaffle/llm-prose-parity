@@ -14,6 +14,7 @@ On a real chapter-drafting task, blind-rated, for our specific prose voice:
 - **The local open-weight models** (qwen3-32b, mistral-small-24b, glm-4.7-flash, gpt-oss-120b) were *faithful to the plot but flat* — competent prose that "read like the outline" — and some **broke hard style rules while sounding fluent** (the trap). One looped/degenerated outright.
 - **Hosted non-Anthropic frontier models** (OpenAI's GPT-5.6 "Terra"/"Sol" tier) were competent but also "felt like the script" — they nailed sequence, not voice. **Note:** Terra/Sol are *closed, cloud-only* models — you cannot run them on your own hardware, so they're irrelevant to the buy-a-machine question and appear here only as a hosted ceiling. (Being listed on OpenRouter does **not** mean a model is open-weight — OpenRouter is a router to hosted APIs; most of its catalogue is proprietary. The only *runnable-locally* models are ones with published weights, e.g. the qwen/mistral/glm/gpt-oss entries above.)
 - **Bigger ≠ better for prose:** a 120B open model scored *worst* in one round; a 32B that fits a 48GB Mac scored higher. Throughput and parameter count did not predict usable writing.
+- **Writing-*tuned* didn't rescue it either.** We also tried a writing-specialized commercial model (Writer's Palmyra-X5). It was the most *polished* prose in the field — and it still **broke the hard style constraint** (our task banned a whole class of imagery; it used it freely) and **ignored the required POV**. Fluent, and wrong. Exactly the failure the Constraint axis exists to catch, and a caution that "fine-tuned for writing" ≠ "follows your rules."
 
 Our conclusion for now: **keep drafting on a hosted frontier model; local isn't there yet for this.** The plan is to **re-run this every ~year** and see if it still holds — this is a moving target, and the whole reason the tool exists is to answer it with fresh evidence instead of assuming. Run it on *your* task and your answer may differ; that's the point.
 
@@ -29,6 +30,30 @@ It's a **local-LLM creative-writing benchmark** you run yourself, blind, on a **
 
 ## Why it's not gameable
 The drafting task is **generated fresh** (a randomized premise → a strong "author model" expands it into a full brief with beats, locked dialogue, dialect registers, and one hard stylistic constraint). There is **no fixed benchmark corpus** to train against, so a run tells you how models do on *new* material. You generate a task once, test every contestant on that same task, and mint a new one only when you choose.
+
+## How this differs from existing writing benchmarks
+There are good creative-writing evals already — but they answer a different question. Public leaderboards
+(EQ-Bench, the awesomeagents/creative-writing board) judge with an **LLM-judge or crowd** on **fixed,
+published prompts**. Academic frameworks (CreativityPrism, LitBench) are **LLM-judge-centric** on
+standardized tasks. [Hemingway-bench](https://surgehq.ai/blog/hemingway-bench-ai-writing-leaderboard) is
+the most rigorous — **blind, paid expert human raters at real scale** — but still on *generic* prompts.
+And the popular "local LLM" repos (`ollama-benchmark`, `local-llm-workbench`) measure **tokens/sec**, not
+whether the writing is any good.
+
+This tool is deliberately the thing none of them are: **personal.** It answers *"which model writes the
+way **I** need, for **my** work, on hardware **I** could own?"* — not "which model writes best on average."
+Four things set it apart:
+- **Your voice, your rules** — you test *your own* prose task (bring-your-own project), rated by the one
+  person whose taste actually decides: you. Not an LLM-judge, not a crowd, not paid raters on generic prompts.
+- **Fresh, randomized task per run** — no fixed/leakable prompt set to overfit or contaminate.
+- **A constraint-adherence axis** — scores rule-following *separately* from fluency, so a model that writes
+  beautifully while breaking your hard rules is caught, not rewarded (nothing else here checks this).
+- **Framed for the hardware decision** — quality tied to model tier and RAM, so it informs *what to buy /
+  whether to buy*, not just a ranking.
+
+**Honest caveat:** if you want statistically-robust, expert-rated *generic* writing quality, Hemingway-bench
+and EQ-Bench do that at a scale a single self-rater can't. Use those to pick a model in the abstract; use
+this to find the one that writes *your* thing on *your* box.
 
 ## Quickstart
 ```bash
