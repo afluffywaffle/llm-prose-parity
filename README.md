@@ -54,9 +54,19 @@ Point `base_url` in `config.json` at any OpenAI-compatible server — e.g. Ollam
 *do* care about (your box, your models) is measured against output you can actually judge.
 
 ## What you need
-- Python 3 (standard library only — no pip installs).
-- An OpenRouter key (a whole run costs cents), **or** a local OpenAI-compatible endpoint.
-- No secrets live in the repo; `config.json` and `*.key` are gitignored.
+This tool *is* AI calls — it doesn't ship any model, it orchestrates them. It calls LLMs for three
+roles, all through the same endpoint:
+1. an **author model** (one strong model) that writes the fresh task,
+2. the **contestant models** you're comparing (the whole point),
+3. a **reader model** that writes the neutral beat-lists.
+
+So you need **access to models** via one of:
+- an **OpenRouter API key** — one account reaches local-class open-weight *and* hosted frontier models; a whole run costs cents (`export OPENROUTER_API_KEY=...` or `~/.config/openrouter.key`), **or**
+- a **local OpenAI-compatible endpoint** (e.g. Ollama) — set `base_url` and run entirely offline, no key, no per-call cost.
+
+Plus **Python 3** (standard library only — no `pip install`). That's it. You do **not** need a separate
+AI assistant to drive it — the scripts do the orchestration; you just run them and rate the output.
+No secrets live in the repo; `config.json` and `*.key` are gitignored.
 
 ## Files
 - `harness/generate_task.py` — fresh randomized drafting task (or structure your own brief).
