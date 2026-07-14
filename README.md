@@ -8,6 +8,15 @@ It exists to help people deciding **what hardware to buy for local LLMs** (a 48G
 
 > Origin: built while deciding whether a local model could draft chapters of a novel-in-progress as well as a hosted frontier model. Short answer that run: no — the small local models were fast and fluent and still failed on *voice*, and some quietly broke hard style rules under fluent prose (the most dangerous kind of failure to delegate). Your mileage — and the models — will change. That's why you re-run it.
 
+## What we found (2026 baseline — one project, one rater, expect this to change)
+On a real chapter-drafting task, blind-rated, for our specific prose voice:
+- **No model matched Claude Opus.** The drafts we'd actually work with were Opus and (close behind) a smaller Anthropic model; everything else sat a clear tier below.
+- **The local open-weight models** (qwen3-32b, mistral-small-24b, glm-4.7-flash, gpt-oss-120b) were *faithful to the plot but flat* — competent prose that "read like the outline" — and some **broke hard style rules while sounding fluent** (the trap). One looped/degenerated outright.
+- **Hosted non-Anthropic frontier models** (OpenAI's GPT-5.6 "Terra"/"Sol" tier) were competent but also "felt like the script" — they nailed sequence, not voice. **Note:** Terra/Sol are *closed, cloud-only* models — you cannot run them on your own hardware, so they're irrelevant to the buy-a-machine question and appear here only as a hosted ceiling. (Being listed on OpenRouter does **not** mean a model is open-weight — OpenRouter is a router to hosted APIs; most of its catalogue is proprietary. The only *runnable-locally* models are ones with published weights, e.g. the qwen/mistral/glm/gpt-oss entries above.)
+- **Bigger ≠ better for prose:** a 120B open model scored *worst* in one round; a 32B that fits a 48GB Mac scored higher. Throughput and parameter count did not predict usable writing.
+
+Our conclusion for now: **keep drafting on a hosted frontier model; local isn't there yet for this.** The plan is to **re-run this every ~year** and see if it still holds — this is a moving target, and the whole reason the tool exists is to answer it with fresh evidence instead of assuming. Run it on *your* task and your answer may differ; that's the point.
+
 ## Who this is for
 If you've asked any of these, this tool is for you:
 - *Which local LLM is actually good at creative writing / prose / fiction?*
