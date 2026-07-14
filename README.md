@@ -8,6 +8,16 @@ It exists to help people deciding **what hardware to buy for local LLMs** (a 48G
 
 > Origin: built while deciding whether a local model could draft chapters of a novel-in-progress as well as a hosted frontier model. Short answer that run: no — the small local models were fast and fluent and still failed on *voice*, and some quietly broke hard style rules under fluent prose (the most dangerous kind of failure to delegate). Your mileage — and the models — will change. That's why you re-run it.
 
+## Who this is for
+If you've asked any of these, this tool is for you:
+- *Which local LLM is actually good at creative writing / prose / fiction?*
+- *Can a 32B or 70B model running on my own machine write as well as GPT-5 / Claude / Gemini?*
+- *Is a 48GB Mac mini (or a 128GB box, or a Strix Halo / DGX Spark) enough to run a model that writes well, or should I just keep paying for a hosted model?*
+- *Do tokens-per-second and prompt-prefill numbers actually translate to output I'd use?* (Short answer: no — speed tells you how fast a model is wrong.)
+- *How do I benchmark LLMs for writing quality instead of trivia/coding?*
+
+It's a **local-LLM creative-writing benchmark** you run yourself, blind, on a **fresh task each time**, so the answer reflects *your* taste and *today's* models — not a leaderboard someone optimized for. Works with **OpenRouter** (local-class open-weight models and hosted frontier models side by side) or a **local Ollama** endpoint.
+
 ## Why it's not gameable
 The drafting task is **generated fresh** (a randomized premise → a strong "author model" expands it into a full brief with beats, locked dialogue, dialect registers, and one hard stylistic constraint). There is **no fixed benchmark corpus** to train against, so a run tells you how models do on *new* material. You generate a task once, test every contestant on that same task, and mint a new one only when you choose.
 
