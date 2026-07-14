@@ -68,6 +68,25 @@ Plus **Python 3** (standard library only — no `pip install`). That's it. You d
 AI assistant to drive it — the scripts do the orchestration; you just run them and rate the output.
 No secrets live in the repo; `config.json` and `*.key` are gitignored.
 
+**Example `config.json`** — a strong author, a field of local-class contestants, a neutral reader
+(pick an author/reader that are NOT in the contestant list, so nobody grades their own homework):
+```jsonc
+{
+  "author_model": "anthropic/claude-opus-4.8",        // writes the fresh task (use a strong model)
+  "reader_model": "anthropic/claude-sonnet-5",         // neutral beat-lists (not a contestant)
+  "contestants": [
+    "qwen/qwen3-32b",                                  // the models you're actually judging —
+    "z-ai/glm-4.7-flash",                              // local-class open weights here...
+    "mistralai/mistral-small-24b-instruct-2501",
+    "openai/gpt-oss-120b",
+    "anthropic/claude-opus-4.8"                         // ...plus a frontier anchor to calibrate against
+  ],
+  "temperature": 0.2, "max_tokens": 8000, "parallel": 8
+}
+```
+Slugs change — verify current ones with the `curl` below. Running fully local? Set `base_url` to your
+Ollama endpoint and use its model names for all three roles.
+
 ## Files
 - `harness/generate_task.py` — fresh randomized drafting task (or structure your own brief).
 - `harness/run_parity.py` — every model drafts the task, blind labels + sealed reveal map.
