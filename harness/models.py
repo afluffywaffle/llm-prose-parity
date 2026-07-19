@@ -54,6 +54,11 @@ def call(model, system, user, key=None, max_tokens=8000, temperature=0.2,
             if e.code in (429, 500, 502, 503) and attempt < retries - 1:
                 time.sleep(6 * (attempt + 1)); continue
             raise
+        except (urllib.error.URLError, TimeoutError) as e:
+            last = f"network error: {e!r}"[:160]
+            if attempt < retries - 1:
+                time.sleep(6 * (attempt + 1)); continue
+            raise
         content = (r.get("choices") or [{}])[0].get("message", {}).get("content")
         if content and content.strip():
             return content.strip(), r.get("usage", {})
