@@ -64,9 +64,11 @@ def main():
         prev_tail = tail(prose); log.append({"beat": b["id"], "words": len(prose.split())})
         print(f"  beat {b['id']:<3} OK  {len(prose.split()):>4} words")
     chapter = "\n\n".join(parts)
-    open(f"{a.out}/draft_{label}.md", "w").write(chapter)
-    json.dump({"model": a.model, "beats": log, "total_words": len(chapter.split())},
-              open(f"{a.out}/meta_{label}.json", "w"), indent=2)
+    with open(f"{a.out}/draft_{label}.md", "w", encoding="utf-8") as f:
+        f.write(chapter)
+    with open(f"{a.out}/meta_{label}.json", "w", encoding="utf-8") as f:
+        json.dump({"model": a.model, "beats": log, "total_words": len(chapter.split())},
+                  f, indent=2)
     print(f"\n{a.model}: {len(chapter.split())} words over {len(parts)} beats -> {a.out}/draft_{label}.md")
 
 

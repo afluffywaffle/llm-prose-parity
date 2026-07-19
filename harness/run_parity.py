@@ -30,6 +30,7 @@ def main():
     key = load_key()
     pack = open(a.task).read()
     roster = [m["slug"] if isinstance(m, dict) else m for m in cfg["contestants"]]
+    assert len(set(roster)) == len(roster), f"duplicate contestant slugs: {roster}"
     base = cfg.get("base_url", "https://openrouter.ai/api/v1/chat/completions")
     os.makedirs(a.out, exist_ok=True)
 
@@ -44,7 +45,8 @@ def main():
                               max_tokens=cfg.get("max_tokens", 8000),
                               temperature=cfg.get("temperature", 0.2), base_url=base)
             lab = label_of[slug]
-            open(f"{a.out}/draft_{lab}.md", "w").write(txt)
+            with open(f"{a.out}/draft_{lab}.md", "w", encoding="utf-8") as f:
+                f.write(txt)
             return slug, lab, len(txt.split()), usage.get("cost"), None
         except Exception as e:
             return slug, label_of[slug], 0, None, str(e)[:160]

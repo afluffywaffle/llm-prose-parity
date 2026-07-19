@@ -104,8 +104,10 @@ def main():
                   temperature=cfg.get("author_temperature", 0.9),
                   base_url=cfg.get("base_url", "https://openrouter.ai/api/v1/chat/completions"))
     spec = extract_json(txt)
-    json.dump(spec, open(f"{a.out}/beats.json", "w"), indent=2, ensure_ascii=False)
-    json.dump(premise, open(f"{a.out}/premise.json", "w"), indent=2, ensure_ascii=False)
+    with open(f"{a.out}/beats.json", "w", encoding="utf-8") as f:
+        json.dump(spec, f, indent=2, ensure_ascii=False)
+    with open(f"{a.out}/premise.json", "w", encoding="utf-8") as f:
+        json.dump(premise, f, indent=2, ensure_ascii=False)
 
     # render a human-readable pack.md that every contestant drafts from
     lines = [f"# {spec['title']}", "", f"**Premise:** {spec['premise']}", "",
