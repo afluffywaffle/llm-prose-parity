@@ -10,3 +10,6 @@ runs/
 __pycache__/
 *.pyc
 .DS_Store
+
+# local run-log telemetry (never committed)
+run_log.jsonl

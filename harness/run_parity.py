@@ -41,10 +41,11 @@ def main():
 
     def one(slug):
         try:
+            lab = label_of[slug]
             txt, usage = call(slug, SYSTEM_PROMPT, pack, key=key,
                               max_tokens=cfg.get("max_tokens", 8000),
-                              temperature=cfg.get("temperature", 0.2), base_url=base)
-            lab = label_of[slug]
+                              temperature=cfg.get("temperature", 0.2), base_url=base,
+                              role="contestant", label=lab)
             with open(f"{a.out}/draft_{lab}.md", "w", encoding="utf-8") as f:
                 f.write(txt)
             return slug, lab, len(txt.split()), usage.get("cost"), None

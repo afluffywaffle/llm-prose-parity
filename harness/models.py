@@ -6,6 +6,7 @@ API key resolution (never hard-code a key): $OPENROUTER_API_KEY, then
 (Ollama) pass base_url and any dummy key.
 """
 import json, os, sys, time, urllib.request, urllib.error
+from run_log import log_run
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
@@ -33,9 +34,11 @@ def load_config(path="config.json"):
 
 
 def call(model, system, user, key=None, max_tokens=8000, temperature=0.2,
-         base_url=OPENROUTER_URL, retries=4, extra=None):
+         base_url=OPENROUTER_URL, retries=4, extra=None, role=None, label=None):
     """Return (text, usage_dict). Retries transient 429/5xx and empty/null content
-    (e.g. a reasoning model that spent its whole budget thinking)."""
+    (e.g. a reasoning model that spent its whole budget thinking).
+
+    Logs one run_log.jsonl line per completed call (local-only telemetry; see run_log.py)."""
     key = key or load_key()
     body = {"model": model, "temperature": temperature, "max_tokens": max_tokens,
             "messages": [{"role": "system", "content": system},
@@ -43,7 +46,9 @@ def call(model, system, user, key=None, max_tokens=8000, temperature=0.2,
     if extra:
         body.update(extra)
     data = json.dumps(body).encode()
+    runner = "cloud" if base_url == OPENROUTER_URL else "local"
     last = ""
+    start = time.monotonic()
     for attempt in range(retries):
         req = urllib.request.Request(base_url, data=data, headers={
             "Authorization": "Bearer " + key, "Content-Type": "application/json"})
@@ -61,7 +66,14 @@ def call(model, system, user, key=None, max_tokens=8000, temperature=0.2,
             raise
         content = (r.get("choices") or [{}])[0].get("message", {}).get("content")
         if content and content.strip():
-            return content.strip(), r.get("usage", {})
+            usage = r.get("usage") or {}
+            log_run(bench="prose", model=model, runner=runner,
+                     prompt_tokens=usage.get("prompt_tokens"),
+                     completion_tokens=usage.get("completion_tokens"),
+                     total_tokens=usage.get("total_tokens"),
+                     cost_usd=usage.get("cost"), latency_s=round(time.monotonic() - start, 3),
+                     images=None, peak_ram_gb=None, extra={"role": role, "label": label})
+            return content.strip(), usage
         last = "empty/null content"
         if attempt < retries - 1:
             time.sleep(4 * (attempt + 1)); continue

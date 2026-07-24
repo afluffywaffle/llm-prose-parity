@@ -56,7 +56,8 @@ def main():
         mt = min(cfg.get("max_tokens", 8000), max(int(tgt * 2.2) + 400, MIN_TOKENS))
         try:
             prose, _ = call(a.model, system, user, key=key, max_tokens=mt,
-                            temperature=cfg.get("temperature", 0.2), base_url=base)
+                            temperature=cfg.get("temperature", 0.2), base_url=base,
+                            role="contestant", label=f"{label}:{b['id']}")
         except Exception as e:
             log.append({"beat": b["id"], "error": str(e)[:160]})
             print(f"  beat {b['id']:<3} FAIL"); continue

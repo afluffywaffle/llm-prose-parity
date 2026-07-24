@@ -130,5 +130,27 @@ Ollama endpoint and use its model names for all three roles.
 - `harness/models.py` — shared API-call helper (retries, null-content guard).
 - `METHODOLOGY.md` — the full method, schema, and how to read the results.
 
+## Local run log (private telemetry)
+The harness appends one JSON line per completed model call to `run_log.jsonl` at the repo
+root — model, tokens, cost, latency, and the role (author/contestant/reader). It's written
+LOCALLY ONLY and is never transmitted anywhere; you own the file. It's gitignored, so it
+never gets committed. Disable it with `BENCH_NO_LOG=1`.
+
+**Verify it's local-only** — the logger is deliberately tiny and auditable:
+
+1. **Read the source.** `harness/run_log.py` is stdlib-only (`json/os/sys/time`); its only I/O
+   is `open(<repo>/run_log.jsonl, "a")` — a local append, no HTTP/socket import, no network call:
+   `grep -nE "requests|urllib|http|socket|fetch|post|telemetry|analytics" harness/run_log.py` → no matches.
+2. **Inspect the artifact.** `cat run_log.jsonl` — plain JSONL, nothing hidden.
+3. **Watch the network.** Under Little Snitch / `lsof -i` / `sudo tcpdump`, run a round and
+   confirm the only outbound traffic is to the OpenRouter (or your local Ollama) endpoint you
+   configured; the logger opens no connections of its own.
+4. **Prove it offline.** Point at a local Ollama endpoint with the internet off — drafts and
+   the log line both work, proving the logger never needed the network.
+5. **Turn it off.** `BENCH_NO_LOG=1`, or delete the file.
+
+Honest boundary: the harness calls whatever model endpoint you configure; the run log adds
+**no** new network destination — it only writes locally.
+
 ## License
 MIT. See `LICENSE`.

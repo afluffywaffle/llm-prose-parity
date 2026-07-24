@@ -32,7 +32,7 @@ def main():
         draft = open(path).read()
         try:
             txt, _ = call(reader, READER_SYS, draft, key=key, max_tokens=2000,
-                          temperature=0.0, base_url=base)
+                          temperature=0.0, base_url=base, role="reader", label=lab)
             open(f"{a.run}/beats_{lab}.md", "w").write(txt)
             print(f"  {lab}: summarized")
         except Exception as e:

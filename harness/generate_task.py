@@ -102,7 +102,8 @@ def main():
     txt, _ = call(cfg["author_model"], AUTHOR_SYS, user,
                   max_tokens=cfg.get("author_max_tokens", 6000),
                   temperature=cfg.get("author_temperature", 0.9),
-                  base_url=cfg.get("base_url", "https://openrouter.ai/api/v1/chat/completions"))
+                  base_url=cfg.get("base_url", "https://openrouter.ai/api/v1/chat/completions"),
+                  role="author", label=None)
     spec = extract_json(txt)
     with open(f"{a.out}/beats.json", "w", encoding="utf-8") as f:
         json.dump(spec, f, indent=2, ensure_ascii=False)
